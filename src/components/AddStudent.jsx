@@ -1,46 +1,32 @@
 import axios from "axios";
+import { useState } from "react";
 
 
 export const AddStudent = () => {
 
-  // const [data,setData]=useState({
-  //   firstname:"",
-  //   lastname:"",
-  //   email:"",
-  //   gender:"",
-  //   age:"",
-  //   tenth:"",
-  //   twelth:"",
-  //   branch:""
-  // })
+const [data,setData]=useState({preferred_branch:"acting"})
 
   const handleChange=(e)=>{
-    // setData({
-    //   ...data,
-    // })
-    console.log(e.target.value)
+   const{className, value}=e.target;
   }
 
-  const handleSubmit=(e)=>{
+  const handleForm=(e)=>{
     e.preventDefault();
-    
+    axios.post("http://localhost:8080/students",user)
     //POST method
   }
 
-  const getData=()=>{
-    axios.get("http://localhost:8080/students")
-    .then(({data})=>setData(data))
-  }
+  
 
-  const addData=()=>{
-    axios.post("http://localhost:8080/students")
-    .then(()=>getData())
-  }
+  // const addData=()=>{
+  //   axios.post("http://localhost:8080/students")
+  //   .then(()=>getData())
+  // }
 
-  const updateData=(e)=>{
-    axios.patch(`http://localhost:8080/students/${e.id}`)
-    .then(()=>getData())
-  }
+  // const updateData=(e)=>{
+  //   axios.patch(`http://localhost:8080/students/${e.id}`)
+  //   .then(()=>getData())
+  // }
 
   return (
     <form className="addstudent">
@@ -51,7 +37,7 @@ export const AddStudent = () => {
           name="first_name"
           className="first_name"
           placeholder="enter first name"
-          onChange={handleChange}
+          onChange={handleChange} required
         />
       </div>
       <div>
@@ -62,7 +48,7 @@ export const AddStudent = () => {
           name="last_name"
           className="last_name"
           placeholder="enter last name"
-          onChange={handleChange}
+          onChange={handleChange} required
         />
       </div>
       <div>
@@ -73,7 +59,7 @@ export const AddStudent = () => {
           name="email"
           className="email"
           placeholder="enter email"
-          onChange={handleChange}
+          onChange={handleChange} required
         />
       </div>
 
@@ -86,6 +72,7 @@ export const AddStudent = () => {
             className="male"
             type="radio"
             value={"male"}
+            onChange={handleChange} required
           />{" "}
           Female{" "}
           <input
@@ -93,6 +80,7 @@ export const AddStudent = () => {
             className="female"
             type="radio"
             value={"female"}
+            onChange={handleChange} required
           />
         </div>
       </div>
@@ -103,6 +91,7 @@ export const AddStudent = () => {
           name="age"
           className="age"
           placeholder="enter age"
+          onChange={handleChange} required
         />
       </div>
       <div>
@@ -112,6 +101,7 @@ export const AddStudent = () => {
           name="tenth_score"
           className="tenth_score"
           placeholder="enter 10th score"
+          onChange={handleChange} required
         />{" "}
       </div>
       <div>
@@ -121,10 +111,12 @@ export const AddStudent = () => {
           name="twelth_score"
           className="twelth_score"
           placeholder="enter 12th score"
+          onChange={handleChange} required
         />{" "}
       </div>
       <div>
         <select
+        onChange={handleChange} required
           value={""} // select dropdown needs both value and onChange attributes
           name="preferred_branch"
           className="preferred_branch"
@@ -138,9 +130,13 @@ export const AddStudent = () => {
         </select>
       </div>
 
-      <input className="submit" type="submit" value="Submit" onSubmit={handleSubmit} />
+      <input className="submit" type="submit" value="Submit" />
+
       {
-        // <div className="error"></div>
+
+        <div className="error">
+
+        </div>
         // show this div with proper error before submitting form, if there's anything not provided
         // eg: first name missing, age cannot be greater than 100 etc
       }

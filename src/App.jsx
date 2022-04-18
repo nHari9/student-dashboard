@@ -9,7 +9,6 @@ function App() {
     <div className="App">
       <button className="togglebtn" onClick={()=>setTable(!table) }>
         {table?"Goto students list":"Add a new student"}
-        
         </button>
         {table ? <AddStudent/>:<ShowStudents/>}
       {/* Show either  AddStudent component or ShowStudents dependeing on the above button click  */}
