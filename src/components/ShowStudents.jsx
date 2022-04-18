@@ -1,29 +1,54 @@
-import { useEffect, useState } from "react";
 
-
+import {useEffect, useState} from "react"
+import axios from "axios"
 export const ShowStudents = () => {
-
-  let [sort,setSort]=useState({
+  var [sort,setSort]=useState({
     sortby:"first_name",
-    sortOrder:"asc"
-  })
+    sortorder:"asc"
+  });
+
 
   const handleChange=(e)=>{
-    const {className,value}=e.target;
+    const {className,value}=e.target
     setSort({...sort,[className]:value})
   }
 
-  const [Data,setData]=useState([]);
+  const [Data,setData]=useState([])
   useEffect(()=>{
     getData()
   },[])
 
   const getData=()=>{
-    axios.get("http://localhost:8080/students")
-    .then(({data})=>{setData([...data.sort((a,b)=>a.first_name>b.first_name?1:-1)])})
+    axios.get("http://localhost:8080/students").then(({data})=>{
+    setData([...data.sort((a,b)=>a.first_name>b.first_name?1:-1)])})
   }
 
+  const handleSort=({sortby,sortorder})=>{
+   
+   if(sortby==="gender"){
+     if(sortorder==="asc")setData([...Data.sort((a,b)=>a.gender>b.gender?1:-1)])
+      else setData([...Data.sort((a,b)=>a.gender<b.gender?1:-1)])
+   }
+   else if(sortby==="first_name"){
+    if(sortorder==="asc")setData([...Data.sort((a,b)=>a.first_name>b.first_name?1:-1)])
+    else setData([...Data.sort((a,b)=>a.first_name<b.first_name?1:-1)])
+   }
+   else if(sortby==="age"){
+    if(sortorder==="asc")setData([...Data.sort((a,b)=>a.age-b.age)])
+    else setData([...Data.sort((a,b)=>b.age-a.age)])
+   }
+   else if(sortby==="tenth_score"){
+    if(sortorder==="asc")setData([...Data.sort((a,b)=>a.tenth_score-b.tenth_score)])
+    else setData([...Data.sort((a,b)=>b.tenth_score-a.tenth_score)])
+   }
+   else if(sortby==="twelth_score"){
+    if(sortorder==="asc")setData([...Data.sort((a,b)=>a.twelth_score-b.twelth_score)])
+    else setData([...Data.sort((a,b)=>b.twelth_score-a.twelth_score)])
+   }
 
+   
+   
+  }
   return (
     <div>
       <div className="controls">
@@ -52,7 +77,9 @@ export const ShowStudents = () => {
             <option value="desc">Descending</option>
           </select>
         </div>
-        <button className="sort">sort</button>
+        <button className="sort" onClick={()=>{handleSort(sort)
+        
+        }}>sort</button>
       </div>
       <table className="table">
         <thead>
@@ -69,8 +96,8 @@ export const ShowStudents = () => {
         </thead>
         <tbody className="tbody">
           {/* populate all rows like below: */}
-          {Data.map(e=>
-          <tr className="row"> key = {e.id}
+         {Data.map(e=> 
+            <tr className="row" key={e.id}>
             <td className="first_name">{e.first_name}</td>
             <td className="last_name">{e.last_name}</td>
             <td className="email">{e.email}</td>

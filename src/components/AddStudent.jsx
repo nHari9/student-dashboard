@@ -1,65 +1,50 @@
 import axios from "axios";
 import { useState } from "react";
 
-
 export const AddStudent = () => {
 
-const [data,setData]=useState({preferred_branch:"acting"})
+  const [user,setUser]=useState({preferred_branch:"law"})
 
-  const handleChange=(e)=>{
-   const{className, value}=e.target;
-  }
 
-  const handleForm=(e)=>{
-    e.preventDefault();
-    axios.post("http://localhost:8080/students",user)
-    //POST method
-  }
-
-  
-
-  // const addData=()=>{
-  //   axios.post("http://localhost:8080/students")
-  //   .then(()=>getData())
-  // }
-
-  // const updateData=(e)=>{
-  //   axios.patch(`http://localhost:8080/students/${e.id}`)
-  //   .then(()=>getData())
-  // }
-
+   const handleChange=(e)=>{
+     const {className,value}=e.target;
+     if(className==="male"||className==="female")setUser({...user,gender:value})
+     else setUser({...user,[className]:value})
+   }
+const handleForm=(e)=>{
+  e.preventDefault()
+axios.post("http://localhost:8080/students",user)
+}
   return (
-    <form className="addstudent">
+    <form className="addstudent" onSubmit={(event)=>handleForm(event)}>
       <div>
         Firstname:{" "}
-        <input
+        <input onChange={handleChange}
           type="text"
           name="first_name"
           className="first_name"
           placeholder="enter first name"
-          onChange={handleChange} required
+          required
         />
       </div>
       <div>
         {" "}
         Last Name:
-        <input
+        <input onChange={handleChange} required
           type="text"
           name="last_name"
           className="last_name"
           placeholder="enter last name"
-          onChange={handleChange} required
         />
       </div>
       <div>
         {" "}
         Email:
-        <input
-          type="email"
+        <input onChange={handleChange}
+          type="email" required
           name="email"
           className="email"
           placeholder="enter email"
-          onChange={handleChange} required
         />
       </div>
 
@@ -67,57 +52,55 @@ const [data,setData]=useState({preferred_branch:"acting"})
         Gender: {/* NOTE: radio boxes only work when they have same `name`. */}
         <div>
           Male
-          <input
+          <input onChange={handleChange} required
             name="gender"
             className="male"
             type="radio"
-            value={"male"}
-            onChange={handleChange} required
+            value="male"
           />{" "}
           Female{" "}
-          <input
+          <input onChange={handleChange} required
             name="gender"
             className="female"
             type="radio"
-            value={"female"}
-            onChange={handleChange} required
+            value="female"
           />
         </div>
       </div>
       <div>
         Age{" "}
-        <input
+        <input onChange={handleChange} required
           type="number"
           name="age"
           className="age"
+          max={50}
           placeholder="enter age"
-          onChange={handleChange} required
         />
       </div>
       <div>
         Tenth Score:{" "}
-        <input
+        <input onChange={handleChange} required
           type="number"
           name="tenth_score"
           className="tenth_score"
           placeholder="enter 10th score"
-          onChange={handleChange} required
+          max={100}
         />{" "}
       </div>
       <div>
         Twelth Score:{" "}
-        <input
+        <input onChange={handleChange} required
           type="number"
+          max={100}
           name="twelth_score"
           className="twelth_score"
           placeholder="enter 12th score"
-          onChange={handleChange} required
         />{" "}
       </div>
       <div>
-        <select
-        onChange={handleChange} required
-          value={""} // select dropdown needs both value and onChange attributes
+        <select onChange={handleChange}
+         required
+          // select dropdown needs both value and onChange attributes
           name="preferred_branch"
           className="preferred_branch"
         >
@@ -131,12 +114,11 @@ const [data,setData]=useState({preferred_branch:"acting"})
       </div>
 
       <input className="submit" type="submit" value="Submit" />
-
       {
-
-        <div className="error">
-
-        </div>
+       <div className="error">
+         <p>{user.age!==undefined&&user.age>50?"user age should be below 50":""}</p>
+         <p>{(user.tenth_score!==undefined&&user.tenth_score>100)||(user.twelth_score!==undefined&&user.twelth_score>100)?"10th and 12th score should not be greater than 100":""}</p>
+       </div>
         // show this div with proper error before submitting form, if there's anything not provided
         // eg: first name missing, age cannot be greater than 100 etc
       }
